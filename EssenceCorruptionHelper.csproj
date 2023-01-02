@@ -6,6 +6,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <OutputPath>bin\debug\</OutputPath>
+    </PropertyGroup>
+
     <ItemGroup>
       <Reference Include="ExileCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\..\..\ExileCore.dll</HintPath>

@@ -32,50 +32,55 @@ public class EssenceCorruptionHelper : BaseSettingsPlugin<Settings>
         Draw();
     }
 
-    bool boolMonolithHasMeds()
+    bool BoolMonolithHasMeds()
     {
-        Func<string, bool> shouldHighlight = (text) => {
-            if (string.IsNullOrEmpty(text)) return false;
-            if (text.Contains("Misery"))
-            {
-                return true;
-            }
-            if (text.Contains("Envy"))
-            {
-                return true;
-            }
-            if (text.Contains("Dread"))
-            {
-                return true;
-            }
-            if (text.Contains("Scorn"))
-            {
-                return true;
-            }            
-
-            // No matches, return false
-            return false;
-        };
-
         return GameController.IngameState.IngameUi.ItemsOnGroundLabelsVisible
                     .Where(x => x.ItemOnGround.Path == "Metadata/MiscellaneousObjects/Monolith")
                     .First().Label.Children[1].Children
                     .Select(x => x.Text)
                     // Returns true if any of the properties text 
-                    .Any(t => shouldHighlight(t));
+                    .Any(text =>
+                    {
+                        if (string.IsNullOrEmpty(text)) return false;
+                        if (text.Contains("Misery"))
+                        {
+                            return true;
+                        }
+                        if (text.Contains("Envy"))
+                        {
+                            return true;
+                        }
+                        if (text.Contains("Dread"))
+                        {
+                            return true;
+                        }
+                        if (text.Contains("Scorn"))
+                        {
+                            return true;
+                        }
+
+                        // No matches, return false
+                        return false;
+                    });
     }
 
-    private bool boolHasMonolithAmountOfEssence()
-    {
-        return GameController.IngameState.IngameUi.ItemsOnGroundLabelsVisible
+    private bool BoolMonolithHasAmountOfEssence()
+        => GameController.IngameState.IngameUi.ItemsOnGroundLabelsVisible
             .Where(x => x.ItemOnGround.Path == "Metadata/MiscellaneousObjects/Monolith")
             .First().Label.Children[1].Children.Count() - 4 >= Settings.AmountOfEssence;
+    
+    private void DrawTextAndImage(Vector2 position)
+    {
+        using (Graphics.SetTextScale(Settings.TextSize))
+        {
+            Graphics.DrawText("Corrupt me", position, Color.Red, FontAlign.Center);
+        }
+        Graphics.DrawImage("corruption.png", new RectangleF(position.X - 25, position.Y - 125, 64, 63));
     }
 
     private void Draw()
     {
         var camera = ingameState.Camera;
-        var playerPos = GameController.Player.PosNum;
 
         var entities = GameController.Entities
             .Where(entity => entity.HasComponent<Render>() &&
@@ -88,30 +93,21 @@ public class EssenceCorruptionHelper : BaseSettingsPlugin<Settings>
         {
             var entityPos = entity.PosNum;
             var entityScreenPos = camera.WorldToScreen(entityPos.Translate(0, 0, 0));
-            var playerScreenPos = camera.WorldToScreen(playerPos.Translate(0, 0, 0));
 
             if (Settings.ToggleMeds)
             {
                 //highlight MEDS Shrine
-                if (boolMonolithHasMeds())
+                if (BoolMonolithHasMeds())
                 {
-                    using (Graphics.SetTextScale(Settings.TextSize))
-                    {
-                        Graphics.DrawText("Corrupt me", entityScreenPos, Color.Red, FontAlign.Center);
-                    }
-                    Graphics.DrawImage("corruption.png", new RectangleF(entityScreenPos.X-25, entityScreenPos.Y-125, 64, 63));
+                    DrawTextAndImage(entityScreenPos);
                 }
             }
 
             if (Settings.ToggleAmount)
             {
-                if(boolHasMonolithAmountOfEssence())
+                if(BoolMonolithHasAmountOfEssence())
                 {
-                    using (Graphics.SetTextScale(Settings.TextSize))
-                    {
-                        Graphics.DrawText("Corrupt me", entityScreenPos, Color.Red, FontAlign.Center);
-                    }
-                    Graphics.DrawImage("corruption.png", new RectangleF(entityScreenPos.X-25, entityScreenPos.Y-125, 64, 63));
+                    DrawTextAndImage(entityScreenPos);
                 }
             }
         }

@@ -39,7 +39,7 @@ public class EssenceCorruptionHelper : BaseSettingsPlugin<Settings>
 
     private bool MonolithHasMeds()
     {
-        //check if there is Misery, Envy, Dread or Scourn Essence.
+        //check if there is Misery, Envy, Dread or Scorn Essence.
         return true;
     }
 

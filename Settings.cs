@@ -11,21 +11,24 @@ public class Settings : ISettings
     public Settings()
     {
         Enable = new ToggleNode(true);
-        ToggleSixEssence = new ToggleNode(true);
         ToggleMeds = new ToggleNode(true);
-        DrawSize = new RangeNode<int>(5, 0, 100);
+        AmountOfEssence = new RangeNode<int>(6, 0, 10);
+        ToggleAmount = new ToggleNode(true);
+        TextSize = new RangeNode<int>(3, 0, 10);
     }
 
-    [Menu("Enable")] public ToggleNode Enable { get; set; }
+    [Menu("Enable")] 
+    public ToggleNode Enable { get; set; }
 
-    [Menu("Corrupt 6+ Essence?")]
-    [JsonIgnore]
-    public ToggleNode ToggleSixEssence { get; set; }
-
-    [Menu("Corrupt Meds? (Misery, envy, dread, scorn")]
-    [JsonIgnore]
+    [Menu("Corrupt Meds? (Misery, envy, dread, scorn)")]
     public ToggleNode ToggleMeds { get; set; }
 
-    [Menu("Draw Size")]
-    public RangeNode<int> DrawSize { get; set; }
+    [Menu("Corrupt X Amount ?")]
+    public ToggleNode ToggleAmount { get; set; }
+
+    [Menu("Amount: ")]
+    public RangeNode<int> AmountOfEssence { get; set; }
+
+    [Menu("Text Size: ")]
+    public RangeNode<int> TextSize { get; set; }
 }

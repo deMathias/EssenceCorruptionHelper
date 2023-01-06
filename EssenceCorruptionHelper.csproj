@@ -24,4 +24,10 @@
       <PackageReference Include="SharpDX.Mathematics" Version="4.2.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="corruption.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

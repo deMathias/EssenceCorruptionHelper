@@ -4,7 +4,7 @@ using ExileCore.Shared.Attributes;
 using ExileCore.Shared.Interfaces;
 using ExileCore.Shared.Nodes;
 
-namespace DefaultNamespace;
+namespace EssenceCorruptionHelper;
 
 public class Settings : ISettings
 {
@@ -13,7 +13,7 @@ public class Settings : ISettings
         Enable = new ToggleNode(true);
         ToggleSixEssence = new ToggleNode(true);
         ToggleMeds = new ToggleNode(true);
-        TextNodeComponentNumber = new TextNode();
+        DrawSize = new RangeNode<int>(5, 0, 100);
     }
 
     [Menu("Enable")] public ToggleNode Enable { get; set; }
@@ -26,7 +26,6 @@ public class Settings : ISettings
     [JsonIgnore]
     public ToggleNode ToggleMeds { get; set; }
 
-    [Menu("Component Number")]
-    public TextNode TextNodeComponentNumber { get; set; }
-
-    }
+    [Menu("Draw Size")]
+    public RangeNode<int> DrawSize { get; set; }
+}

@@ -32,8 +32,23 @@ public class EssenceCorruptionHelper : BaseSettingsPlugin<Settings>
         Draw();
     }
 
+    bool assessAlreadyCorrupted() {
+        return GameController.IngameState.IngameUi.ItemsOnGroundLabelsVisible
+                .Where(x => x.ItemOnGround.Path == "Metadata/MiscellaneousObjects/Monolith")
+                .First().Label.Children[1].Children
+                .Select(x => x.Text)
+                .Any(text => {
+                    if (string.IsNullOrEmpty(text)) return false;
+                    return text.Contains("Remnant of Corruption");
+                });
+    }
+
     bool BoolMonolithHasMeds()
     {
+        if (assessAlreadyCorrupted()) {
+            return false;
+        }
+
         return GameController.IngameState.IngameUi.ItemsOnGroundLabelsVisible
                     .Where(x => x.ItemOnGround.Path == "Metadata/MiscellaneousObjects/Monolith")
                     .First().Label.Children[1].Children
@@ -64,11 +79,16 @@ public class EssenceCorruptionHelper : BaseSettingsPlugin<Settings>
                     });
     }
 
-    private bool BoolMonolithHasAmountOfEssence()
-        => GameController.IngameState.IngameUi.ItemsOnGroundLabelsVisible
+    private bool BoolMonolithHasAmountOfEssence() {
+        if (assessAlreadyCorrupted()) {
+            return false;
+        }
+
+        return GameController.IngameState.IngameUi.ItemsOnGroundLabelsVisible
             .Where(x => x.ItemOnGround.Path == "Metadata/MiscellaneousObjects/Monolith")
             .First().Label.Children[1].Children.Count() - 4 >= Settings.AmountOfEssence;
-    
+    }
+
     private void DrawTextAndImage(Vector2 position)
     {
         using (Graphics.SetTextScale(Settings.TextSize))
